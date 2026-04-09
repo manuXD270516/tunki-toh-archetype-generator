@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pe.oh.sip</groupId>
+    <artifactId>sip-toh-platform</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>SIP TOH Platform</name>
+    <description>Tunki TOH v3.4 — Shared libraries, parent POM and Maven archetype</description>
+
+    <modules>
+        <module>sip-toh-parent</module>
+        <module>sip-exception-handler</module>
+        <module>sip-core-client</module>
+        <module>sip-endpoint-timeout</module>
+        <module>sip-toh-archetype</module>
+    </modules>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- ============================================================
+         Azure Artifacts — Maven Feed
+         Todos los artefactos se publican aqui. Los MS consumidores
+         los resuelven automaticamente sin install manual.
+         ============================================================ -->
+    <distributionManagement>
+        <repository>
+            <id>BackendArtifactsInDigitalpePro@Local</id>
+            <name>Tunki TOH Maven Feed</name>
+            <url>https://pkgs.dev.azure.com/InDigitalpe/_packaging/BackendArtifactsInDigitalpePro%40Local/maven/v1</url>
+        </repository>
+        <snapshotRepository>
+            <id>BackendArtifactsInDigitalpePro@Local</id>
+            <name>Tunki TOH Maven Feed (Snapshots)</name>
+            <url>https://pkgs.dev.azure.com/InDigitalpe/_packaging/BackendArtifactsInDigitalpePro%40Local/maven/v1</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

@@ -1,0 +1,14 @@
+#set( $symbol_dollar = '$' )
+# Production profile — all values from environment variables
+spring:
+  data:
+    mongodb:
+      uri: ${symbol_dollar}{MONGO_URI}
+    redis:
+      cluster:
+        nodes: ${symbol_dollar}{REDIS_NODES}
+
+logging:
+  level:
+    pe.oh.sip: INFO
+    org.springframework: WARN

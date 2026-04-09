@@ -1,0 +1,28 @@
+# Local development profile - Docker Compose infrastructure
+# Infra: docker compose up -d (MongoDB 7 + Redis 7 standalone)
+# JVM flags required for Windows (username with spaces breaks Unix Domain Sockets):
+#   -Djava.io.tmpdir=C:/tmp -Djdk.net.unixdomain.tmpdir=C:/tmp
+spring:
+  http:
+    client:
+      factory: simple
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/${dbName}
+    redis:
+      host: localhost
+      port: 6379
+
+core:
+  services:
+    customer:
+      url: http://localhost:8081
+    account:
+      url: http://localhost:8082
+    cache:
+      url: http://localhost:8086
+
+logging:
+  level:
+    pe.oh.sip: DEBUG
+    org.springframework.web.client: DEBUG

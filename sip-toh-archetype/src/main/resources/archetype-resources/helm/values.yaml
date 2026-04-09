@@ -1,0 +1,52 @@
+replicaCount: 2
+
+image:
+  repository: gcr.io/indigital-pe/${msName}
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
+
+livenessProbe:
+  httpGet:
+    path: /${msName}/actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /${msName}/actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 15
+  periodSeconds: 5
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: "prod"
+  - name: MONGO_URI
+    valueFrom:
+      secretKeyRef:
+        name: ${msName}-secrets
+        key: mongo-uri
+  - name: REDIS_NODES
+    valueFrom:
+      configMapKeyRef:
+        name: ${msName}-config
+        key: redis-nodes

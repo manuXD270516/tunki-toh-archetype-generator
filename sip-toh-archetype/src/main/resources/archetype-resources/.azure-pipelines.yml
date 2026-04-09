@@ -1,0 +1,58 @@
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+      - feature/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  MAVEN_OPTS: '-Dmaven.repo.local=$(Pipeline.Workspace)/.m2/repository'
+  MS_NAME: '${msName}'
+
+stages:
+  - stage: Build
+    displayName: 'Build & Test'
+    jobs:
+      - job: BuildJob
+        steps:
+          - task: Maven@4
+            displayName: 'Maven Build'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'clean verify'
+              options: '-B -DskipITs=false'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.${javaVersion}'
+
+          - task: PublishTestResults@2
+            displayName: 'Publish Test Results'
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/target/surefire-reports/TEST-*.xml'
+
+          - task: PublishCodeCoverageResults@2
+            displayName: 'Publish Coverage'
+            inputs:
+              codeCoverageTool: 'JaCoCo'
+              summaryFileLocation: '**/target/site/jacoco/jacoco.xml'
+
+  - stage: Docker
+    displayName: 'Docker Build & Push'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - job: DockerJob
+        steps:
+          - task: Docker@2
+            displayName: 'Build & Push Image'
+            inputs:
+              containerRegistry: 'gcr-connection'
+              repository: 'indigital-pe/$(MS_NAME)'
+              command: 'buildAndPush'
+              Dockerfile: 'Dockerfile'
+              tags: |
+                $(Build.BuildId)
+                latest

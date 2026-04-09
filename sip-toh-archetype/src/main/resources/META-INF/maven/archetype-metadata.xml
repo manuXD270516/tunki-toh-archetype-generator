@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0
+    http://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
+    name="sip-toh-archetype">
+
+    <requiredProperties>
+        <!-- Layer type: jn (Journey), pd (Producto), bs (Negocio) -->
+        <requiredProperty key="tipo">
+            <defaultValue>pd</defaultValue>
+        </requiredProperty>
+        <!-- Microservice name: home, payments, card-config, etc. -->
+        <requiredProperty key="micro">
+            <defaultValue>sample</defaultValue>
+        </requiredProperty>
+        <!-- Capitalized micro name for class names: Home, Payments, CardConfig -->
+        <requiredProperty key="Micro">
+            <defaultValue>Sample</defaultValue>
+        </requiredProperty>
+        <!-- Java version -->
+        <requiredProperty key="javaVersion">
+            <defaultValue>21</defaultValue>
+        </requiredProperty>
+        <!-- MS full name (derived) -->
+        <requiredProperty key="msName">
+            <defaultValue>${tipo}-sip-toh-${micro}</defaultValue>
+        </requiredProperty>
+        <!-- MongoDB database name (derived) -->
+        <requiredProperty key="dbName">
+            <defaultValue>sip_${micro}</defaultValue>
+        </requiredProperty>
+    </requiredProperties>
+
+    <fileSets>
+        <!-- Root files -->
+        <fileSet filtered="true" packaged="false">
+            <directory></directory>
+            <includes>
+                <include>Dockerfile</include>
+                <include>docker-compose.yml</include>
+                <include>.azure-pipelines.yml</include>
+                <include>.gitignore</include>
+            </includes>
+        </fileSet>
+
+        <!-- Helm charts -->
+        <fileSet filtered="true" packaged="false">
+            <directory>helm</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
+        <!-- Application resources (yml configs) -->
+        <fileSet filtered="true" packaged="false">
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.yml</include>
+            </includes>
+        </fileSet>
+
+        <!-- Java source (packaged under pe.oh.sip.{tipo}.{micro}) -->
+        <fileSet filtered="true" packaged="true">
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+
+        <!-- Test source (packaged under pe.oh.sip.{tipo}.{micro}) -->
+        <fileSet filtered="true" packaged="true">
+            <directory>src/test/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+</archetype-descriptor>
