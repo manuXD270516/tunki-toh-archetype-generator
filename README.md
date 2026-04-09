@@ -27,4 +27,4 @@ Orden del reactor: parent → librerías → archetype.
 
 ## Arquetipo
 
-Ver `sip-toh-archetype/README.md` para generar un microservicio con `mvn archetype:generate`.
+Guía detallada: **[archetype-usage-guide.md](archetype-usage-guide.md)**. Resumen en `sip-toh-archetype/README.md` y generación con `mvn archetype:generate`.
